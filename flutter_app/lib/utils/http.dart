@@ -1,31 +1,23 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
-import 'dart:core';
-import 'dart:io';
+
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_module/apis/app_apis.dart';
-import 'package:flutter_module/bean/base_response.dart';
-import 'package:flutter_module/config/app_config.dart';
-import 'package:flutter_module/provider/global.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_app/apis/app_apis.dart';
+import 'package:flutter_app/bean/base_response.dart';
+import 'package:flutter_app/config/app_config.dart';
 
 import 'interceptors/header.dart';
 import 'interceptors/log.dart';
 import 'interceptors/token.dart';
-
-
 
 class HttpUtil {
   static HttpUtil _instance = HttpUtil._internal();
 
   factory HttpUtil() => _instance;
 
-  Dio dio;
+  late Dio dio;
 
   // CancelToken cancelToken = new CancelToken();
 
@@ -56,7 +48,6 @@ class HttpUtil {
     // dio.interceptors.add(new ErrorInterceptors(dio));
     // dio.interceptors.add(new NetCacheInterceptor());
     // 加内存缓存
-
   }
 
   /*
@@ -70,7 +61,8 @@ class HttpUtil {
   }
 
   Future<BaseResponse> getAsync(String url,
-      {Map<String, dynamic> data, Map<String, dynamic> headers}) async {
+      {Map<String, dynamic>? data,
+      required Map<String, dynamic> headers}) async {
     // 数据拼接
     if (data != null && data.isNotEmpty) {
       StringBuffer options = new StringBuffer('?');
@@ -87,10 +79,10 @@ class HttpUtil {
   }
 
   void get(String url,
-      {Map<String, dynamic> data,
-      Map<String, dynamic> headers,
-      Function success,
-      Function error}) async {
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? headers,
+      Function? success,
+      Function? error}) async {
     // 数据拼接
     if (data != null && data.isNotEmpty) {
       StringBuffer options = new StringBuffer('?');
@@ -103,24 +95,24 @@ class HttpUtil {
     }
 
     // 发送get请求
-    _sendRequest(url, 'get', success, headers: headers, error: error);
+    _sendRequest(url, 'get', success!, headers: headers, error: error);
   }
 
   void post(String url,
-      {Map<String, dynamic> data,
-      Map<String, dynamic> headers,
-      Function success,
-      Function error}) async {
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? headers,
+      Function? success,
+      Function? error}) async {
     // 发送post请求
     _sendRequest(url, 'post', success,
         data: data, headers: headers, error: error);
   }
 
   void postJson(String url,
-      {Map<String, dynamic> data,
-      Map<String, dynamic> headers,
-      Function success,
-      Function error}) async {
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? headers,
+      Function? success,
+      Function? error}) async {
     // 发送post请求
     _sendRequest(url, 'post', success,
         data: data,
@@ -129,13 +121,11 @@ class HttpUtil {
         options: Options(contentType: "application/json"));
   }
 
-
-
   // 请求处理
   Future<BaseResponse> _sendRequestAsync(String url, String method,
-      {Map<String, dynamic> data,
-      Map<String, dynamic> headers,
-      Options options}) async {
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? headers,
+      Options? options}) async {
     int _code;
     String _msg;
     var _backData;
@@ -156,8 +146,8 @@ class HttpUtil {
       return dio.get(url).then((response) {
         if (response.statusCode != 200) {
           _msg = '网络请求错误,状态码:' + response.statusCode.toString();
-          baseResponse.code = response.statusCode;
-          baseResponse.msg = response.statusMessage;
+          baseResponse.code = response.statusCode!;
+          baseResponse.msg = response.statusMessage!;
           baseResponse.data = response.data;
           return baseResponse;
         } else {
@@ -182,8 +172,8 @@ class HttpUtil {
       return dio.post(url, data: dataMap, options: options).then((response) {
         if (response.statusCode != 200) {
           _msg = '网络请求错误,状态码:' + response.statusCode.toString();
-          baseResponse.code = response.statusCode;
-          baseResponse.msg = response.statusMessage;
+          baseResponse.code = response.statusCode!;
+          baseResponse.msg = response.statusMessage!;
           baseResponse.data = response.data;
           return baseResponse;
         } else {
@@ -208,11 +198,11 @@ class HttpUtil {
   }
 
   // 请求处理
-  void _sendRequest(String url, String method, Function success,
-      {Map<String, dynamic> data,
-      Map<String, dynamic> headers,
-      Options options,
-      Function error}) async {
+  void _sendRequest(String url, String method, Function? success,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? headers,
+      Options? options,
+      Function? error}) async {
     int _code;
     String _msg;
 
@@ -273,7 +263,7 @@ class HttpUtil {
   }
 
   // 返回错误信息
-  void _handError(Function errorCallback, int code, String errorMsg) {
+  void _handError(Function? errorCallback, int? code, String errorMsg) {
     if (errorCallback != null) {
       errorCallback(code, errorMsg);
     }

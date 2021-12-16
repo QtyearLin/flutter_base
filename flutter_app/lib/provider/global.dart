@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:common_utils/common_utils.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_module/utils/http.dart';
-import 'package:flutter_module/utils/storage.dart';
+import 'package:flutter_app/utils/http.dart';
+import 'package:flutter_app/utils/storage.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
@@ -24,13 +23,13 @@ class Global {
   static bool isIOS = Platform.isIOS;
 
   /// android 设备信息
-  static AndroidDeviceInfo androidDeviceInfo;
+  static late AndroidDeviceInfo androidDeviceInfo;
 
   /// ios 设备信息
-  static IosDeviceInfo iosDeviceInfo;
+  static late IosDeviceInfo iosDeviceInfo;
 
   /// 包信息
-  static PackageInfo packageInfo;
+  static late PackageInfo packageInfo;
 
   /// 是否第一次打开
   static bool isFirstOpen = false;
@@ -41,7 +40,6 @@ class Global {
   static var xx = "1231";
 
   static bool isLoginAsTeacher = false; //老师
-
 
   /// init
   static Future init() async {
@@ -61,11 +59,11 @@ class Global {
     });
     // 工具初始
     await StorageUtil.init();
-    isFirstOpen = StorageUtil().getBoolDefault(AppDataKeys.is_first_opened, true);
+    isFirstOpen =
+        StorageUtil().getBoolDefault(AppDataKeys.is_first_opened, true);
     if (isFirstOpen) {
       StorageUtil().setBool(AppDataKeys.is_first_opened, false);
     }
-    LogUtil.init(isDebug: true, tag: "APP");
     // android 状态栏为透明的沉浸
     if (Platform.isAndroid) {
       SystemUiOverlayStyle systemUiOverlayStyle =

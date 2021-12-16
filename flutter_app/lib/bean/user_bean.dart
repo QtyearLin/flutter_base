@@ -1,21 +1,18 @@
-import 'package:common_utils/common_utils.dart';
-import 'package:flutter/cupertino.dart' as prefix0;
-
 
 class UserBean {
-  int id;
-  String phone;
-  String realName;
-  String nickname;
-  String icon;
-  String createTime;
-  String token;
-  String roleName; //角色
-  String depName; //角色
-  String name;
-  int role; //dingyi  0 xues 1 teacher
+  late int id;
+  late String phone;
+  late String realName;
+  late String nickname;
+  late String icon;
+  late String createTime;
+  late String token;
+  late String roleName; //角色
+  late String depName; //角色
+  late String name;
+  late int role; //dingyi  0 xues 1 teacher
 
-  static UserBean fromMap(Map<String, dynamic> map) {
+  static UserBean? fromMap(Map<dynamic, dynamic> map) {
     if (map == null) return null;
     UserBean userBeanBean = UserBean();
     userBeanBean.id = map['id'];

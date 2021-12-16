@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppLoadingWidget extends StatefulWidget {
   final bool sliver;
 
-  const AppLoadingWidget({Key key, this.sliver= false}) : super(key: key);
+  const AppLoadingWidget({Key? key, this.sliver = false}) : super(key: key);
 
   @override
   _AppLoadingWidgetState createState() => _AppLoadingWidgetState();

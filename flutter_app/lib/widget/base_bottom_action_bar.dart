@@ -5,12 +5,12 @@ class BaseAppBar extends StatelessWidget {
     this.color,
     this.fabLocation,
     this.shape,
-    this.rowContents,
+    required this.rowContents,
   });
 
-  final Color color;
-  final FloatingActionButtonLocation fabLocation;
-  final NotchedShape shape;
+  final Color? color;
+  final FloatingActionButtonLocation? fabLocation;
+  final NotchedShape? shape;
   final List<Widget> rowContents;
 
   static final List<FloatingActionButtonLocation> kCenterLocations =

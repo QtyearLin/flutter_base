@@ -1,24 +1,26 @@
 import 'dart:async';
 import 'dart:ui' as prefix0;
 
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_module/bean/app_eventbus_event.dart';
-import 'package:flutter_module/bean/user_bean.dart';
-import 'package:flutter_module/config/app_channel_methods.dart';
-import 'package:flutter_module/localization/default_localizations.dart';
-import 'package:flutter_module/pages/tabs/index_activity.dart';
-import 'package:flutter_module/provider/user_provider.dart';
-import 'package:flutter_module/route/route_util.dart';
-import 'package:flutter_module/style/app_theme.dart';
-import 'package:flutter_module/utils/bus_utils.dart';
-import 'package:flutter_module/widget/base_will_pop_scope_route.dart';
+import 'package:flutter_app/bean/user_bean.dart';
+import 'package:flutter_app/pages/tabs/index_activity.dart';
+import 'package:flutter_app/style/app_theme.dart';
+import 'package:flutter_app/bean/app_eventbus_event.dart';
+import 'package:flutter_app/bean/user_bean.dart';
+import 'package:flutter_app/config/app_channel_methods.dart';
+import 'package:flutter_app/localization/default_localizations.dart';
+import 'package:flutter_app/pages/tabs/index_activity.dart';
+import 'package:flutter_app/provider/user_provider.dart';
+import 'package:flutter_app/route/route_util.dart';
+import 'package:flutter_app/style/app_theme.dart';
+import 'package:flutter_app/utils/bus_utils.dart';
+import 'package:flutter_app/widget/base_will_pop_scope_route.dart';
 import 'package:provider/provider.dart';
 import 'home_drawer.dart';
 
 class HomeIndex extends StatefulWidget {
-  HomeIndex({Key key}) : super(key: key);
+  HomeIndex({Key? key}) : super(key: key);
 
   @override
   _HomeIndexState createState() => _HomeIndexState();
@@ -28,8 +30,8 @@ class _HomeIndexState extends State<HomeIndex>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   var _title = null;
-  UserBean _userBean;
-  PageController _controller;
+  late UserBean _userBean;
+  late PageController _controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -46,23 +48,23 @@ class _HomeIndexState extends State<HomeIndex>
     IndexActivityPage(),
   ];
 
-  List<BottomNavigationBarItem> _bottomTabs = null;
+  late List<BottomNavigationBarItem> _bottomTabs;
 
   List<BottomNavigationBarItem> _createBottomTabs(BuildContext context) {
     if (null == _bottomTabs) {
       _bottomTabs = [
         BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text(AppLocalizations.i18n(context).index_tab_home)),
+            title: Text(AppLocalizations.i18n(context)!.index_tab_home)),
         BottomNavigationBarItem(
             icon: Icon(Icons.book),
-            title: Text(AppLocalizations.i18n(context).index_tab_3)),
+            title: Text(AppLocalizations.i18n(context)!.index_tab_3)),
         BottomNavigationBarItem(
             icon: Icon(Icons.access_alarm_rounded),
-            title: Text(AppLocalizations.i18n(context).index_tab_live)),
+            title: Text(AppLocalizations.i18n(context)!.index_tab_live)),
         BottomNavigationBarItem(
             icon: Icon(Icons.add_a_photo_sharp),
-            title: Text(AppLocalizations.i18n(context).index_tab_4)),
+            title: Text(AppLocalizations.i18n(context)!.index_tab_4)),
       ];
     }
     return _bottomTabs;
@@ -71,7 +73,7 @@ class _HomeIndexState extends State<HomeIndex>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _title = AppLocalizations.i18n(context).index_tab_home;
+    _title = AppLocalizations.i18n(context)!.index_tab_home;
   }
 
   @override
@@ -171,8 +173,7 @@ class _HomeIndexState extends State<HomeIndex>
                 _controller.jumpToPage(index);
                 setState(() {
                   _currentIndex = index;
-                  Text text = _bottomTabs[index].title;
-                  print("title:" + text.data);
+                  Text text = _bottomTabs[index].title as Text;
                   _title = text.data;
                 });
               },
@@ -201,8 +202,7 @@ class _HomeIndexState extends State<HomeIndex>
         onDone: null,
         cancelOnError: null);
 
-    _userBean = Provider.of<UserProvider>(context, listen: false).get();
-    LogUtil.v("home" + _userBean.toString());
+    _userBean = Provider.of<UserProvider>(context, listen: false).get()!;
     //call native init IM socket
     RouteUtils.jumpToNativeWithValue(ChannelMethodConstants.initIMSocket, map: {
       "user_id": _userBean.id.toString(),
@@ -211,20 +211,18 @@ class _HomeIndexState extends State<HomeIndex>
 
   // called by natvie
   Future<dynamic> _platformCallHandler(MethodCall call) async {
-    LogUtil.v("_callFromAndroidHandler:" + call.method);
     switch (call.method) {
       case "getFlutterName":
         return "Flutter name flutter";
         break;
       case ChannelMethodConstants.nUpdateLiveStatus:
-        LogUtil.v("AppEventBusEvent:" + call.arguments);
         EventBusUtils.getInstance().fire(
             new AppEventBusEvent(EventKey.udpate_live_status, call.arguments));
         break;
     }
   }
 
-  Future _onEventListenerPlatForm(Object event) async {
+  Future _onEventListenerPlatForm(dynamic event) async {
     setState(() {});
     var result =
         await RouteUtils.methodPlatForm.invokeMethod('echoEvent', event);
@@ -238,10 +236,10 @@ class _HomeIndexState extends State<HomeIndex>
   void _handleDrawer(BuildContext context) {
     // Scaffold.of(context).openDrawer();
     if (_scaffoldKey.currentState != null &&
-        _scaffoldKey.currentState.isDrawerOpen) {
+        _scaffoldKey.currentState!.isDrawerOpen) {
       Navigator.pop(context);
     } else {
-      _scaffoldKey.currentState.openDrawer();
+      _scaffoldKey.currentState!.openDrawer();
     }
   }
 

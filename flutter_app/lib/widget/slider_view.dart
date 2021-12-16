@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_module/style/app_theme.dart';
+import 'package:flutter_app/style/app_theme.dart';
 
 class SliderView extends StatefulWidget {
   const SliderView(
-      {Key key,
+      {Key? key,
       this.onChangedistValue,
       this.total = 100,
       this.distValue = 50,
@@ -12,7 +12,7 @@ class SliderView extends StatefulWidget {
       this.showUnit = ""})
       : super(key: key);
 
-  final Function(double) onChangedistValue;
+  final Function(double)? onChangedistValue;
   final double distValue;
   final double total; //总成
   final String showTitle;
@@ -75,7 +75,7 @@ class _SliderViewState extends State<SliderView> {
                   distValue = value;
                 });
                 try {
-                  widget.onChangedistValue(distValue);
+                  widget.onChangedistValue!(distValue);
                 } catch (_) {}
               },
               min: 0,
@@ -112,20 +112,20 @@ class CustomThumbShape extends SliderComponentShape {
   void paint(
     PaintingContext context,
     Offset thumbCenter, {
-    Animation<double> activationAnimation,
-    Animation<double> enableAnimation,
-    bool isDiscrete,
-    TextPainter labelPainter,
-    RenderBox parentBox,
-    Size sizeWithOverflow,
-    SliderThemeData sliderTheme,
-    TextDirection textDirection,
-    double textScaleFactor,
-    double value,
+    Animation<double>? activationAnimation,
+    Animation<double>? enableAnimation,
+    bool? isDiscrete,
+    TextPainter? labelPainter,
+    RenderBox? parentBox,
+    Size? sizeWithOverflow,
+    SliderThemeData? sliderTheme,
+    TextDirection? textDirection,
+    double? textScaleFactor,
+    double? value,
   }) {
     final Canvas canvas = context.canvas;
     final ColorTween colorTween = ColorTween(
-      begin: sliderTheme.disabledThumbColor,
+      begin: sliderTheme!.disabledThumbColor,
       end: sliderTheme.thumbColor,
     );
     canvas.drawPath(
@@ -143,7 +143,7 @@ class CustomThumbShape extends SliderComponentShape {
     cPaint..color = Colors.white;
     cPaint..strokeWidth = 14 / 2;
     canvas.drawCircle(Offset(thumbCenter.dx, thumbCenter.dy), 12, cPaint);
-    cPaint..color = colorTween.evaluate(enableAnimation);
+    cPaint..color = colorTween.evaluate(enableAnimation!)!;
     canvas.drawCircle(Offset(thumbCenter.dx, thumbCenter.dy), 10, cPaint);
   }
 

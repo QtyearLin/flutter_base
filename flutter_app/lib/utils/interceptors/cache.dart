@@ -1,10 +1,11 @@
 import 'dart:collection';
-
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_module/config/app_config.dart';
-import 'package:flutter_module/utils/storage.dart';
+import 'package:flutter_app/config/app_config.dart';
 
-class CacheObject {
+import '../storage.dart';
+
+class CacheObject extends InterceptorsWrapper {
   CacheObject(this.response)
       : timeStamp = DateTime.now().millisecondsSinceEpoch;
   Response response;
@@ -24,8 +25,8 @@ class NetCacheInterceptor extends Interceptor {
   var cache = LinkedHashMap<String, CacheObject>();
 
   @override
-  onRequest(RequestOptions options) async {
-    if (!AppConfig.NET_CACHE_ENABLE) return options;
+  onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    if (!AppConfig.NET_CACHE_ENABLE) return;
 
     // refresh标记是否是"下拉刷新"
     bool refresh = options.extra["refresh"] == true;
@@ -45,60 +46,29 @@ class NetCacheInterceptor extends Interceptor {
 
       // 删除磁盘缓存
       if (cacheDisk) {
-         StorageUtil().remove(options.uri.toString());
-      }
-
-      return options;
-    }
-
-    // get 请求，开启缓存
-    if (options.extra["noCache"] != true &&
-        options.method.toLowerCase() == 'get') {
-      String key = options.extra["cacheKey"] ?? options.uri.toString();
-
-      // 策略 1 内存缓存优先，2 然后才是磁盘缓存
-
-      // 1 内存缓存
-      var ob = cache[key];
-      if (ob != null) {
-        //若缓存未过期，则返回缓存内容
-        if ((DateTime.now().millisecondsSinceEpoch - ob.timeStamp) / 1000 <
-            AppConfig.CACHE_MAXAGE) {
-          return cache[key].response;
-        } else {
-          //若已过期则删除缓存，继续向服务器请求
-          cache.remove(key);
-        }
-      }
-
-      // 2 磁盘缓存
-      if (cacheDisk) {
-        var cacheData =  StorageUtil().getJSON(key);
-        if (cacheData != null) {
-          return Response(
-            statusCode: 200,
-            data: cacheData,
-          );
-        }
+        StorageUtil().remove(options.uri.toString());
       }
     }
   }
 
   @override
-  onError(DioError err) async {
+  onError(
+    DioError err,
+    ErrorInterceptorHandler handler,
+  ) {
     // 错误状态不缓存
   }
 
   @override
-  onResponse(Response response) async {
+  onResponse(Response response, ResponseInterceptorHandler handler) {
     // 如果启用缓存，将返回结果保存到缓存
     if (AppConfig.NET_CACHE_ENABLE) {
-      await _saveCache(response);
+      _saveCache(response);
     }
   }
 
   Future<void> _saveCache(Response object) async {
-    RequestOptions options = object.request;
+    RequestOptions options = object.requestOptions;
 
     // 只缓存 get 的请求
     if (options.extra["noCache"] != true &&

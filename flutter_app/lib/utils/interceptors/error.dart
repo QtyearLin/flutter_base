@@ -1,9 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 
-
 const NOT_TIP_KEY = "noTip";
-
 
 class ErrorInterceptors extends InterceptorsWrapper {
   static const NETWORK_ERROR = -1;
@@ -12,17 +10,13 @@ class ErrorInterceptors extends InterceptorsWrapper {
   ErrorInterceptors(this._dio);
 
   @override
-  onRequest(RequestOptions options) async {
-    //没有网络
-    // var connectivityResult = await (new Connectivity().checkConnectivity());
-    // if (connectivityResult == ConnectivityResult.none) {
-    //   return _dio.resolve(new ResultData(false, false, NETWORK_ERROR));
-    // }
-    return options;
-  }
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {}
 
   @override
-  Future onError(DioError err) {
+  void onResponse(Response response, ResponseInterceptorHandler handler) {}
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) {
     createErrorEntity(err);
   }
 
@@ -32,30 +26,26 @@ class ErrorInterceptors extends InterceptorsWrapper {
   // 错误信息
   ErrorEntity createErrorEntity(DioError error) {
     switch (error.type) {
-      case DioErrorType.CANCEL:
+      case DioErrorType.cancel:
         {
           return ErrorEntity(code: -1, message: "请求取消");
         }
-        break;
-      case DioErrorType.CONNECT_TIMEOUT:
+      case DioErrorType.connectTimeout:
         {
           return ErrorEntity(code: -1, message: "连接超时");
         }
-        break;
-      case DioErrorType.SEND_TIMEOUT:
+      case DioErrorType.sendTimeout:
         {
           return ErrorEntity(code: -1, message: "请求超时");
         }
-        break;
-      case DioErrorType.RECEIVE_TIMEOUT:
+      case DioErrorType.receiveTimeout:
         {
           return ErrorEntity(code: -1, message: "响应超时");
         }
-        break;
-      case DioErrorType.RESPONSE:
+      case DioErrorType.response:
         {
           try {
-            int errCode = error.response.statusCode;
+            int? errCode = error.response!.statusCode;
             // String errMsg = error.response.statusMessage;
             // return ErrorEntity(code: errCode, message: errMsg);
             switch (errCode) {
@@ -63,59 +53,49 @@ class ErrorInterceptors extends InterceptorsWrapper {
                 {
                   return ErrorEntity(code: errCode, message: "请求语法错误");
                 }
-                break;
               case 401:
                 {
                   return ErrorEntity(code: errCode, message: "没有权限");
                 }
-                break;
               case 403:
                 {
                   return ErrorEntity(code: errCode, message: "服务器拒绝执行");
                 }
-                break;
               case 404:
                 {
                   return ErrorEntity(code: errCode, message: "无法连接服务器");
                 }
-                break;
               case 405:
                 {
                   return ErrorEntity(code: errCode, message: "请求方法被禁止");
                 }
-                break;
               case 500:
                 {
                   return ErrorEntity(code: errCode, message: "服务器内部错误");
                 }
-                break;
               case 502:
                 {
                   return ErrorEntity(code: errCode, message: "无效的请求");
                 }
-                break;
               case 503:
                 {
                   return ErrorEntity(code: errCode, message: "服务器挂了");
                 }
-                break;
               case 505:
                 {
                   return ErrorEntity(code: errCode, message: "不支持HTTP协议请求");
                 }
-                break;
               default:
                 {
                   // return ErrorEntity(code: errCode, message: "未知错误");
                   return ErrorEntity(
-                      code: errCode, message: error.response.statusMessage);
+                      code: errCode, message: error.response!.statusMessage);
                 }
             }
           } on Exception catch (_) {
             return ErrorEntity(code: -1, message: "未知错误");
           }
         }
-        break;
       default:
         {
           return ErrorEntity(code: -1, message: error.message);
@@ -126,10 +106,10 @@ class ErrorInterceptors extends InterceptorsWrapper {
 
 // 异常处理
 class ErrorEntity implements Exception {
-  int code;
-  String message;
+  int ?code;
+  String ? message;
 
-  ErrorEntity({this.code, this.message});
+  ErrorEntity({required this.code, required this.message});
 
   String toString() {
     if (message == null) return "Exception";

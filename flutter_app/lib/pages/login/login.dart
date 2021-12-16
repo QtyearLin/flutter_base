@@ -1,25 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_module/apis/user_api.dart';
-import 'package:flutter_module/pages/login/register.dart';
-import 'package:flutter_module/pages/home_index.dart';
-import 'package:flutter_module/config/app_keys.dart';
+import 'package:flutter_app/apis/user_api.dart';
+import 'package:flutter_app/config/app_keys.dart';
+import 'package:flutter_app/pages/login/register.dart';
+import 'package:flutter_app/provider/global.dart';
+import 'package:flutter_app/provider/user_provider.dart';
+import 'package:flutter_app/style/app_theme.dart';
+import 'package:flutter_app/utils/storage.dart';
+import 'package:flutter_app/widget/app/like_login_btn.dart';
+import 'package:flutter_app/widget/app/logo.dart';
+import 'package:flutter_app/widget/base_toast.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_module/pages/login/login_verfy_code.dart';
-import 'package:flutter_module/provider/global.dart';
-import 'package:flutter_module/provider/user_provider.dart';
-import 'package:flutter_module/style/app_theme.dart';
-import 'package:flutter_module/utils/storage.dart';
-import 'package:flutter_module/widget/app/like_login_btn.dart';
-import 'package:flutter_module/widget/app/logo.dart';
-import 'package:flutter_module/widget/base_toast.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:provider/provider.dart';
+
+import '../home_index.dart';
+import 'login_verfy_code.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -40,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
   //表单状态
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  var _password = ''; //密码
-  var _username = ''; //用户名
+  String? _password = ''; //密码
+  String? _username = ''; //用户名
   var _isShowPwd = false; //是否显示密码
   var _isShowClear = false;
 
@@ -49,8 +48,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    super.initState();
-    // TODO: implement initState
     //设置焦点监听
     _focusNodeUserName.addListener(_focusNodeListener);
     _focusNodePassWord.addListener(_focusNodeListener);
@@ -71,8 +68,8 @@ class _LoginPageState extends State<LoginPage> {
     _password = StorageUtil().getString(AppDataKeys.user_passwd);
     if (null != _username && null != _password) {
       setState(() {
-        _userNameController.text = _username;
-        _userPasswdController.text = _password;
+        _userNameController.text = _username!;
+        _userPasswdController.text = _password!;
         // _login(auto: true);
       });
     }
@@ -110,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
   /**
    * 验证用户名
    */
-  String validateUserName(var value) {
+  String? validateUserName(var value) {
     // 正则匹配手机号
     RegExp exp = RegExp(
         r'^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$');
@@ -125,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
   /**
    * 验证密码
    */
-  String validatePassWord(value) {
+  String? validatePassWord(value) {
     if (value.isEmpty) {
       return '密码不能为空';
     } else if (value.trim().length < 6 || value.trim().length > 18) {
@@ -174,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
               validator: validateUserName,
               //保存数据
               onSaved: (var value) {
-                _username = value;
+                _username = value!;
               },
             ),
             TextFormField(
@@ -200,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
               validator: validatePassWord,
               //保存数据
               onSaved: (var value) {
-                _password = value;
+                _password = value!;
               },
             )
           ],
@@ -214,9 +211,9 @@ class _LoginPageState extends State<LoginPage> {
       _focusNodePassWord.unfocus();
       _focusNodeUserName.unfocus();
 
-      if (_formKey.currentState.validate()) {
+      if (_formKey.currentState!.validate()) {
         //只有输入通过验证，才会执行这里
-        _formKey.currentState.save();
+        _formKey.currentState!.save();
         //todo 登录操作
         print("$_username + $_password");
         _login();
@@ -287,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             thirdLoginArea,
             SizedBox(
-              height: ScreenUtil().setHeight(20),
+              height: 20,
             ),
             Container(
               margin: EdgeInsets.only(right: 20, left: 30),
@@ -311,9 +308,7 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => LoginWithVerfyCodePage(
-                                      phone: name,
-                                      type: false
-                                    )));
+                                    phone: name, type: false)));
                       } else {
                         BaseToast.showToast("请输入正确的手机号");
                       }
@@ -355,7 +350,7 @@ class _LoginPageState extends State<LoginPage> {
                   // ),
                   logoImageArea,
                   SizedBox(
-                    height: ScreenUtil().setHeight(30),
+                    height: 30,
                   ),
                   inputTextArea,
                   Container(
@@ -386,7 +381,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(
-                    height: ScreenUtil().setHeight(20),
+                    height: 20,
                   ),
                   loginButtonArea,
                 ],
@@ -399,10 +394,10 @@ class _LoginPageState extends State<LoginPage> {
 
   _login({bool auto = false}) async {
     if (!auto) {
-      if (!_formKey.currentState.validate()) {
+      if (!_formKey.currentState!.validate()) {
         return;
       }
-      _formKey.currentState.save();
+      _formKey.currentState!.save();
     }
     EasyLoading.show(status: "正在加载中...");
     var userName = _username;
@@ -416,7 +411,8 @@ class _LoginPageState extends State<LoginPage> {
       EasyLoading.dismiss(animation: true);
       BaseToast.showToast("登录成功");
       //save data
-      Provider.of<UserProvider>(context, listen: false).saveUser(data);
+      context.read<UserProvider>().saveUser(data);
+
       StorageUtil().setString(AppDataKeys.user_name, _username);
       StorageUtil().setString(AppDataKeys.user_passwd, _password);
       Navigator.pushAndRemoveUntil(

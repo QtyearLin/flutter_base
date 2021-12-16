@@ -1,15 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_module/config/app_keys.dart';
-import 'package:flutter_module/localization/default_localizations.dart';
-import 'package:flutter_module/pages/home_index.dart';
-import 'package:flutter_module/route/route_util.dart';
-import 'package:flutter_module/style/app_theme.dart';
-import 'package:flutter_module/utils/storage.dart';
-import 'package:flutter_module/widget/image.dart';
-import 'package:flutter_screenutil/screenutil.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_app/config/app_keys.dart';
+import 'package:flutter_app/localization/default_localizations.dart';
+import 'package:flutter_app/pages/home_index.dart';
+import 'package:flutter_app/route/route_util.dart';
+import 'package:flutter_app/style/app_theme.dart';
+import 'package:flutter_app/utils/storage.dart';
+import 'package:flutter_app/widget/image.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 class WelcomPage extends StatefulWidget {
   @override
@@ -19,7 +17,6 @@ class WelcomPage extends StatefulWidget {
 }
 
 class WelcomPageState extends State<WelcomPage> {
-  TimerUtil _timerUtil;
 
   List _guideList = [
     ImageUtils.getImgPath('guide1'),
@@ -28,7 +25,7 @@ class WelcomPageState extends State<WelcomPage> {
     ImageUtils.getImgPath('guide4'),
   ];
 
-  List<Widget> _bannerList = new List();
+  List<Widget> _bannerList = [];
 
   int _status = 2; //关闭splash
   bool showJoin = false;
@@ -46,7 +43,6 @@ class WelcomPageState extends State<WelcomPage> {
     super.didChangeDependencies();
     DateTime time = new DateTime.now();
     print("didChangeDependencies:time:" + time.toIso8601String());
-
   }
 
   void _initBannerData() {
@@ -59,7 +55,6 @@ class WelcomPageState extends State<WelcomPage> {
       ));
     }
   }
-
 
   void _goLogin() {
     StorageUtil().setBool(AppDataKeys.is_first_key_guide, false);
@@ -75,7 +70,7 @@ class WelcomPageState extends State<WelcomPage> {
             child: new InkWell(
               onTap: _goLogin,
               child: new Text(
-                AppLocalizations.i18n(context).jump,
+                AppLocalizations.i18n(context)!.jump,
                 textAlign: TextAlign.end,
                 style: TextStyle(
                   color: Colors.black,
@@ -96,7 +91,7 @@ class WelcomPageState extends State<WelcomPage> {
                 color: AppColors.primaryValue,
                 shape: StadiumBorder(),
                 child: new Text(
-                  AppLocalizations.i18n(context).jump_now,
+                  AppLocalizations.i18n(context)!.jump_now,
                   style: TextStyle(color: Colors.white, fontSize: 10.0),
                 ),
               ),
@@ -124,12 +119,6 @@ class WelcomPageState extends State<WelcomPage> {
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    if (_timerUtil != null) _timerUtil.cancel(); //记得在dispose里面把timer cancel。
-  }
-
   Widget _buildSwiper() {
     return new Swiper(
       loop: false,
@@ -140,12 +129,17 @@ class WelcomPageState extends State<WelcomPage> {
             size: 5,
             space: 3,
           )),
-      control: null,
+      // control: null,
       onIndexChanged: _onIndexChanged,
       itemBuilder: (BuildContext context, int index) {
         return _bannerList[index];
       },
       itemCount: _bannerList.length,
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

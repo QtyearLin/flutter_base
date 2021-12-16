@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_module/style/app_theme.dart';
+import 'package:flutter_app/style/app_theme.dart';
 
 class LogoWidget extends StatelessWidget {
   @override

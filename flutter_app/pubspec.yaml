@@ -1,5 +1,9 @@
-name: flutter_module
-description: A new Flutter module.
+name: flutter_app
+description: A new Flutter application.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -11,80 +15,95 @@ description: A new Flutter module.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-#
-# This version is used _only_ for the Runner app, which is used if you just do
-# a `flutter run` or a `flutter make-host-app-editable`. It has no impact
-# on any other native host app that you embed your Flutter project into.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.2 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
 
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
-  flutter_easyloading: ^1.1.3
-  json_annotation: ^3.0.0
-  fluttertoast: ^7.1.1
-  #depengds common_util
-  shared_preferences: ^0.5.12+4
-  common_utils: ^1.2.1
-  flutter_screenutil: ^2.2.0
-  font_awesome_flutter: ^8.8.1
-  dio: ^3.0.10
-  cookie_jar: ^1.0.1
-  dio_cookie_manager: ^1.0.0
-  flutter_easyrefresh: ^2.1.8
-  cached_network_image: ^2.0.0
-  provider: ^4.0.0
-  # 骨架屏
-  pk_skeleton: ^0.0.2
-  # loading
-  loading_animations: ^2.1.0
-  # share
-  share: ^0.6.4
-  # 设备信息
-  device_info: ^0.4.2+3
-  # 包信息
-  package_info: ^0.4.0+18
-  # 路径查询
-  path_provider: ^1.6.8
-  # permission 权限
-  permission_handler: ^5.0.0+hotfix.6
-  # 对话框
-  easy_dialog: ^1.0.5
-  # 错误收集
-  sentry: ^3.0.1
-  rxdart: ^0.22.6
-  flutter_swiper : ^1.1.6
-  #网络检查
-  connectivity: 0.4.9+3
-  #验证码
-  flutter_verification_box: ^1.0.4
-  #eventbus
-  event_bus: ^1.1.1
-  # 本地图片
-  image_picker: ^0.6.7+14
-  # 图片裁切
-  image_cropper: ^1.3.1
-  dropdown_search: ^0.4.9
-#  gzx_dropdown_menu:
-#    git:
-#      url: https://github.com/GanZhiXiong/gzx_dropdown_menu.git
-  url_launcher: ^5.0.3
-  get_it: ^1.0.3+2
 
-  flutter_localizations:
-    sdk: flutter
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^1.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+
+  cupertino_icons: ^1.0.4
+  flutter_easyloading: ^3.0.3
+  json_annotation: ^4.4.0
+  fluttertoast: ^8.0.8
+  #depengds common_util
+  shared_preferences: ^2.0.11
+  font_awesome_flutter: ^9.2.0
+  logger: ^1.1.0
+  convert: ^3.0.1
+  dio: ^4.0.4
+  cookie_jar: ^3.0.1
+  dio_cookie_manager: ^2.0.0
+  flutter_easyrefresh: ^2.2.1
+  cached_network_image: ^3.2.0
+  provider: ^6.0.1
+  # 骨架屏
+  pk_skeleton: ^0.0.2
+  # loading
+  loading_animations: ^2.2.0
+  # share
+  share: ^2.0.4
+  # 设备信息
+  device_info: ^2.0.3
+  # 包信息
+  package_info: ^2.0.2
+  # 路径查询
+  path_provider: ^2.0.8
+  # permission 权限
+  # permission_handler: ^8.3.0
+  # 对话框
+  easy_dialog: ^1.1.0
+  # 错误收集
+  sentry: ^6.2.1
+  rxdart: ^0.27.3
+  flutter_swiper_null_safety : ^1.0.2
+  #网络检查
+  connectivity: ^3.0.6
+  #验证码
+  flutter_verification_box: ^2.0.0
+  #eventbus
+  event_bus: ^2.0.0
+  # 本地图片
+  image_picker: ^0.8.4+4
+  # 图片裁切
+  image_cropper: ^1.4.1
+  dropdown_search: ^2.0.1
+  #  gzx_dropdown_menu:
+  #    git:
+  #      url: https://github.com/GanZhiXiong/gzx_dropdown_menu.git
+  url_launcher: ^6.0.17
+  get_it: ^7.2.0
+
+  flutter_localizations:
     sdk: flutter
 
 # For information on the generic Dart part of this file, see the
@@ -178,7 +197,3 @@ flutter:
   # maintain consistency when adding or modifying assets and plugins.
   # They also do not have any bearing on your native host application's
   # identifiers, which may be completely independent or the same as these.
-  module:
-    androidX: true
-    androidPackage: com.app.flutter.flutter_module
-    iosBundleIdentifier: com.app.flutter.flutterModule

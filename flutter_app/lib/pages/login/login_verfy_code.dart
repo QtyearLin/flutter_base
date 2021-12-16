@@ -1,42 +1,39 @@
 import 'dart:async';
 
-import 'package:common_utils/common_utils.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_module/apis/user_api.dart';
-import 'package:flutter_module/bean/user_bean.dart';
-import 'package:flutter_module/pages/login/register.dart';
-import 'package:flutter_module/pages/home_index.dart';
-import 'package:flutter_module/config/app_url.dart';
-import 'package:flutter_module/config/app_keys.dart';
+import 'package:flutter_app/apis/user_api.dart';
+import 'package:flutter_app/bean/user_bean.dart';
+import 'package:flutter_app/pages/login/register.dart';
+import 'package:flutter_app/pages/home_index.dart';
+import 'package:flutter_app/config/app_url.dart';
+import 'package:flutter_app/config/app_keys.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_module/provider/global.dart';
-import 'package:flutter_module/provider/user_provider.dart';
-import 'package:flutter_module/style/app_theme.dart';
-import 'package:flutter_module/utils/storage.dart';
-import 'package:flutter_module/widget/base_toast.dart';
+import 'package:flutter_app/provider/global.dart';
+import 'package:flutter_app/provider/user_provider.dart';
+import 'package:flutter_app/style/app_theme.dart';
+import 'package:flutter_app/utils/storage.dart';
+import 'package:flutter_app/widget/base_toast.dart';
 import 'package:flutter_verification_box/verification_box.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //验证码登录
 class LoginWithVerfyCodePage extends StatefulWidget {
-  final  phone;
+  final phone;
 
   final bool type; //学生 true 老师 false
 
   @override
   _LoginWithVerfyCodePageState createState() => _LoginWithVerfyCodePageState();
 
-  LoginWithVerfyCodePage({Key key, this.phone, this.type = true})
+  LoginWithVerfyCodePage({Key? key, this.phone, this.type = true})
       : super(key: key);
 }
 
@@ -55,7 +52,7 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
   var _isShowClear = false; //是否显示输入框尾部的清除按钮
   int _countdownNum = 59;
 
-  Timer _countdownTimer;
+  Timer? _countdownTimer;
 
   var _codeCountdownStr = '获取验证码';
 
@@ -91,7 +88,7 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
           } else {
             _codeCountdownStr = '获取验证码';
             _countdownNum = 59;
-            _countdownTimer.cancel();
+            _countdownTimer!.cancel();
             _countdownTimer = null;
           }
         });
@@ -127,11 +124,11 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
                   ),
                 ),
                 new SizedBox(
-                  height: ScreenUtil().setHeight(150),
+                  height: 150,
                 ),
                 new Container(
                   margin: EdgeInsets.only(left: 8),
-                  height: ScreenUtil().setHeight(80),
+                  height: 80,
                   alignment: Alignment.centerLeft,
                   child: Text("请输入验证码登录",
                       style: TextStyle(
@@ -140,11 +137,11 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
                       )),
                 ),
                 new SizedBox(
-                  height: ScreenUtil().setHeight(25),
+                  height: 25,
                 ),
                 new Container(
                   margin: EdgeInsets.only(left: 10),
-                  height: ScreenUtil().setHeight(50),
+                  height: 50,
                   alignment: Alignment.centerLeft,
                   child: Text("验证码已发送至 : " + widget.phone,
                       style: TextStyle(
@@ -153,7 +150,7 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
                       )),
                 ),
                 Container(
-                  height: ScreenUtil().setHeight(100),
+                  height: 100,
                   child: VerificationBox(
                     count: 6,
                     autoFocus: true,
@@ -171,7 +168,7 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
                   ),
                 ),
                 new SizedBox(
-                  height: ScreenUtil().setHeight(25),
+                  height: 25,
                 ),
                 new Container(
                   margin: EdgeInsets.only(left: 8),
@@ -244,7 +241,7 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
       //save data
       UserBean data = new UserBean();
       data.id = 1;
-      data.phone= "12312312";
+      data.phone = "12312312";
       data.name = "XXX";
       Provider.of<UserProvider>(context, listen: false).saveUser(data);
       StorageUtil().setString(AppDataKeys.user_name, widget.phone);
@@ -252,7 +249,7 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeIndex()),
-              (route) => route == null);
+          (route) => route == null);
     });
   }
 }

@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_module/style/app_theme.dart';
-import 'package:flutter_module/widget/app/like_login_btn.dart';
-import 'package:flutter_module/widget/app/logo.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_app/style/app_theme.dart';
+import 'package:flutter_app/widget/app/like_login_btn.dart';
+import 'package:flutter_app/widget/app/logo.dart';
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -28,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
   var _isShowPwd = false; //是否显示密码
   var _isShowClear = false; //是否显示输入框尾部的清除按钮
 
-  Timer _countdownTimer;
+  Timer? _countdownTimer;
   var _codeCountdownStr = "获取验证码";
   int _countdownNum = 59;
 
@@ -46,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
           } else {
             _codeCountdownStr = "获取验证码";
             _countdownNum = 59;
-            _countdownTimer.cancel();
+            _countdownTimer!.cancel();
             _countdownTimer = null;
           }
         });
@@ -97,10 +95,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 // )
               ),
               validator: (value) {
-                return value.trim().length > 0 ? null : "用户名不能为空！";
+                return value!.trim().length > 0 ? null : "用户名不能为空！";
               },
               onSaved: (value) {
-                _username = value;
+                _username = value!;
               },
             ),
             new Flex(
@@ -117,10 +115,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       prefixIcon: Icon(Icons.vpn_key),
                     ),
                     validator: (value) {
-                      return value.trim().length > 0 ? null : "验证码不能为空！";
+                      return value!.trim().length > 0 ? null : "验证码不能为空！";
                     },
                     onSaved: (value) {
-                      _code = value;
+                      _code = value!;
                     },
                   ),
                 ),
@@ -166,10 +164,10 @@ class _RegisterPageState extends State<RegisterPage> {
               obscureText: !_isShowPwd,
               // //密码验证
               validator: (value) {
-                return value.trim().length > 0 ? null : "密码不能为空！";
+                return value!.trim().length > 0 ? null : "密码不能为空！";
               },
               onSaved: (value) {
-                _password = value;
+                _password = value!;
               },
             )
           ],
@@ -183,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _focusNodeCode.unfocus();
       _focusNodeUserName.unfocus();
 
-      if (_formKey.currentState.validate()) {
+      if (_formKey.currentState!.validate()) {
         print("确定");
       }
     });
@@ -218,11 +216,11 @@ class _RegisterPageState extends State<RegisterPage> {
             children: <Widget>[
               logoImageArea,
               new SizedBox(
-                height: ScreenUtil().setHeight(60),
+                height: 60,
               ),
               inputTextArea,
               new SizedBox(
-                height: ScreenUtil().setHeight(60),
+                height: 60,
               ),
               confirmButtonArea
             ],

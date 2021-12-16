@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_module/localization/default_localizations.dart';
-import 'package:flutter_module/route/route_util.dart';
+import 'package:flutter_app/widget/base_empty_shower.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 
-import 'package:flutter_module/widget/base_empty_shower.dart';
 
 class IndexActivityPage extends StatefulWidget {
-  IndexActivityPage({Key key}) : super(key: key);
+  IndexActivityPage({Key? key}) : super(key: key);
 
   _IndexActivityPageState createState() => _IndexActivityPageState();
 }
 
-class _IndexActivityPageState extends State<IndexActivityPage> with AutomaticKeepAliveClientMixin  {
+class _IndexActivityPageState extends State<IndexActivityPage>
+    with AutomaticKeepAliveClientMixin {
   static const nativeChannel =
       const MethodChannel('com.example.flutter/navtive');
   static const flutterChannel =
@@ -21,11 +20,12 @@ class _IndexActivityPageState extends State<IndexActivityPage> with AutomaticKee
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:   Center(
-        child: BaseEmptyPage(message: "敬请期待",),
+      body: Center(
+        child: BaseEmptyPage(
+          message: "敬请期待",
+        ),
       ),
-    )
-    ;
+    );
   }
 
   @override

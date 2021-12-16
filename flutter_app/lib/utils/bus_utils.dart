@@ -1,7 +1,7 @@
 import 'package:event_bus/event_bus.dart';
 
 class EventBusUtils {
-  static EventBus _instance;
+  static late EventBus _instance;
 
   static EventBus getInstance() {
     if (null == _instance) {
@@ -16,6 +16,4 @@ class EventBusUtils {
         .on()
         .listen((event) => print('event fired:  ${event.runtimeType}'));
   }
-
-
 }

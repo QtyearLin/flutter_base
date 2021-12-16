@@ -1,22 +1,22 @@
 import 'dart:async';
 
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 import '../base_empty_shower.dart';
 import 'app_loading.dart';
 
 class AppBuildFuture extends StatefulWidget {
-  final Future futureBuilderFuture;
+  
+  final Future? futureBuilderFuture;
   final AsyncWidgetBuilder asyncWidgetBuilder;
 
   final bool sliver;
-
   const AppBuildFuture(
-      {Key key,
+      {Key? key,
       this.futureBuilderFuture,
       this.sliver = false,
-      this.asyncWidgetBuilder})
+      required this.asyncWidgetBuilder})
       : super(key: key);
 
   @override
@@ -26,6 +26,7 @@ class AppBuildFuture extends StatefulWidget {
 class _AppBuildFutureState extends State<AppBuildFuture> {
   var _tag;
   var _futureBuilderFuture;
+  final Logger logger  = Logger();
 
   @override
   void initState() {
@@ -41,27 +42,27 @@ class _AppBuildFutureState extends State<AppBuildFuture> {
   }
 
   Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
-    LogUtil.v("_buildFuture:" + snapshot.connectionState.toString(), tag: _tag);
+    logger.v("_buildFuture:" + snapshot.connectionState.toString(),  _tag);
     switch (snapshot.connectionState) {
       case ConnectionState.none:
-        LogUtil.v("还没有开始网络请求", tag: _tag);
+        logger.v("还没有开始网络请求",  _tag);
         return BaseEmptyPage(
           onPress: _futureBuilderFuture,
           sliver: this.widget.sliver,
         );
       case ConnectionState.active:
-        LogUtil.v("active", tag: _tag);
+        logger.v("active",  _tag);
         return BaseEmptyPage(
           sliver: this.widget.sliver,
           onPress: _futureBuilderFuture,
         );
       case ConnectionState.waiting:
-        LogUtil.v("waiting", tag: _tag);
+        logger.v("waiting", _tag);
         return AppLoadingWidget(
           sliver: this.widget.sliver,
         );
       case ConnectionState.done:
-        LogUtil.v("done", tag: _tag);
+        logger.v("done", _tag);
         if (snapshot.hasError) {
           return BaseEmptyPage(
             sliver: this.widget.sliver,

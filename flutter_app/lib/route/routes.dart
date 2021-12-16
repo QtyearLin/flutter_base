@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_module/pages/home_index.dart';
-import 'package:flutter_module/pages/login/login.dart';
-import 'package:flutter_module/pages/tabs/index_activity.dart';
-import 'package:flutter_module/route/root_init_page.dart';
-import 'package:flutter_module/route/route_util.dart';
-
+import 'package:flutter_app/pages/home_index.dart';
+import 'package:flutter_app/pages/login/login.dart';
+import 'package:flutter_app/pages/tabs/index_activity.dart';
+import 'package:flutter_app/route/root_init_page.dart';
+import 'package:flutter_app/route/route_util.dart';
 
 //配置路由
 final routes = {
@@ -24,15 +23,15 @@ final routes = {
 var onGenerateRoute = (RouteSettings settings) {
   // 统一处理
   var name = settings.name;
-  Object arguments = settings.arguments;
+  Object? arguments = settings.arguments;
   //外部传入 initRoute
-  if (name.contains("?")) {
+  if (name!.contains("?")) {
     name = _getPageName(settings.name);
     var argumentsStr = _getPageParamJsonStr(settings.name);
     arguments = json.decode(argumentsStr);
 //    arguments = new Map<var,Object>.from(json.decode(argumentsStr));
   }
-  final Function pageContentBuilder = routes[name];
+  final Function? pageContentBuilder = routes[name!];
   if (pageContentBuilder != null) {
     if (arguments != null) {
       print("onGenerateRoute:name:" + name);

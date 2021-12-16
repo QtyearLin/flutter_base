@@ -1,36 +1,32 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_module/config/app_config.dart';
-import 'package:flutter_module/utils/storage.dart';
-
+import 'package:flutter_app/config/app_config.dart';
+import 'package:flutter_app/utils/storage.dart';
 
 class TokenInterceptors extends InterceptorsWrapper {
-  String _token;
-
+  late String? _token;
   @override
-  onRequest(RequestOptions options) async {
+  onRequest(RequestOptions options,RequestInterceptorHandler handler)  {
     //授权码
     if (_token == null) {
-      var authorizationCode = await getAuthorization();
+      var authorizationCode =  getAuthorization();
       if (authorizationCode != null) {
         _token = authorizationCode;
       }
     }
     options.headers["Authorization"] = _token;
-    return options;
   }
 
   @override
-  onResponse(Response response) async {
+  onResponse(Response response,ResponseInterceptorHandler  handler) {
     try {
       var responseJson = response.data;
       if (response.statusCode == 201 && responseJson["token"] != null) {
         _token = 'token ' + responseJson["token"];
-         StorageUtil().setJSON(AppConfig.TOKEN_KEY, _token);
+        StorageUtil().setJSON(AppConfig.TOKEN_KEY, _token);
       }
     } catch (e) {
       print(e);
     }
-    return response;
   }
 
   ///清除授权
@@ -40,9 +36,9 @@ class TokenInterceptors extends InterceptorsWrapper {
   }
 
   ///获取授权token
-  getAuthorization()  {
-    String token =  StorageUtil().getJSON(AppConfig.TOKEN_KEY);
-    if (token!= null) {
+  getAuthorization() {
+    String token = StorageUtil().getJSON(AppConfig.TOKEN_KEY);
+    if (token != null) {
       this._token = token;
       return token;
     }

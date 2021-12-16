@@ -1,9 +1,9 @@
 class BaseResponse {
-  int code;
-  String msg;
+  late int code;
+  late String msg;
   dynamic data;
 
-  static BaseResponse fromMap(Map<String, dynamic> map) {
+  static BaseResponse? fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
     BaseResponse childrenBean = BaseResponse();
     childrenBean.code = map['code'];

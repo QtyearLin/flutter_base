@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class BaseEmptyPage extends StatelessWidget {
   final message;
-  final VoidCallback onPress;
+  final VoidCallback? onPress;
   final bool sliver;
 
   BaseEmptyPage({
-    Key key,
+    Key? key,
     this.message = "数据为空,点击刷新试试",
     this.onPress,
     this.sliver = false,

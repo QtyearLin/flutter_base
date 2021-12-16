@@ -2,22 +2,22 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_module/bean/user_bean.dart';
-import 'package:flutter_module/config/app_keys.dart';
+import 'package:flutter_app/bean/user_bean.dart';
+import 'package:flutter_app/config/app_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
-  bool _isLogin;
-  bool _loginOut;
-  UserBean _userBean;
- //    Consumer
+  late bool _isLogin;
+  late bool _loginOut;
+  late UserBean? _userBean;
+  //    Consumer
   save(Map user) async {
-    UserBean userBean = UserBean.fromMap(user);
+    UserBean? userBean = UserBean.fromMap(user);
     print("userBean:" + userBean.toString());
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
     prefs.setString(AppDataKeys.user, user.toString());
-    _userBean = userBean;
+    _userBean = userBean!;
     notifyListeners();
   }
 
@@ -33,7 +33,7 @@ class UserProvider extends ChangeNotifier {
   clearUser() async {
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
-    prefs.setString(AppDataKeys.user, null);
+    prefs.remove(AppDataKeys.user);
     _userBean = null;
     notifyListeners();
   }
@@ -42,15 +42,14 @@ class UserProvider extends ChangeNotifier {
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
     var user = prefs.getString(AppDataKeys.user);
-      if(user==null)
-        return null;
+    if (user == null) return null;
     print("read local user: $user");
     _userBean = UserBean.fromMap(json.decode(user));
     print("read local user bean: $_userBean");
     return _userBean;
   }
 
-  UserBean get() {
+  UserBean? get() {
     return _userBean;
   }
 

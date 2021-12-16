@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_module/style/app_theme.dart';
-import 'package:flutter_module/utils/interceptors/log.dart';
+import 'package:flutter_app/style/app_theme.dart';
+import 'package:flutter_app/utils/interceptors/log.dart';
 
 class BaseErrorPage extends StatefulWidget {
   final String errorMessage;
@@ -15,9 +15,8 @@ class BaseErrorPage extends StatefulWidget {
 }
 
 class BaseErrorPageState extends State<BaseErrorPage> {
-  static List<Map<String, dynamic>> sErrorStack =
-      new List<Map<String, dynamic>>();
-  static List<String> sErrorName = new List<String>();
+  static List<Map<String, dynamic>> sErrorStack = [];
+  static List<String> sErrorName = [];
 
   final TextEditingController textEditingController =
       new TextEditingController();
@@ -36,20 +35,21 @@ class BaseErrorPageState extends State<BaseErrorPage> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
+    double width =
+        MediaQueryData.fromWindow(WidgetsBinding.instance!.window).size.width;
     return Container(
       color: AppColors.primaryValue,
-      child: new Center(
+      child: Center(
         child: Container(
           alignment: Alignment.center,
           width: width,
           height: width,
-          decoration: new BoxDecoration(
+          decoration:  BoxDecoration(
             color: Colors.white.withAlpha(30),
             gradient:
                 RadialGradient(tileMode: TileMode.mirror, radius: 0.1, colors: [
               Colors.white.withAlpha(10),
-                  AppColors.primaryValue.withAlpha(100),
+              AppColors.primaryValue.withAlpha(100),
             ]),
             borderRadius: BorderRadius.all(Radius.circular(width / 2)),
           ),
@@ -57,28 +57,28 @@ class BaseErrorPageState extends State<BaseErrorPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              new Image(
+              Image(
                   image: new AssetImage(AppICons.DEFAULT_APP_LOGO),
                   width: 90.0,
                   height: 90.0),
-              new SizedBox(
+              const SizedBox(
                 height: 11,
               ),
               Material(
-                child: new Text(
+                child: Text(
                   "Error Occur",
                   style: new TextStyle(fontSize: 24, color: Colors.white),
                 ),
                 color: AppColors.primaryValue,
               ),
-              new SizedBox(
+              SizedBox(
                 height: 40,
               ),
-              new Row(
+              Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new FlatButton(
+                   FlatButton(
                       color: AppColors.white.withAlpha(100),
                       onPressed: () {
                         String content = widget.errorMessage;
@@ -86,10 +86,10 @@ class BaseErrorPageState extends State<BaseErrorPage> {
                         //todo
                       },
                       child: Text("Report")),
-                  new SizedBox(
+                   SizedBox(
                     width: 40,
                   ),
-                  new FlatButton(
+                   FlatButton(
                       color: AppColors.white.withAlpha(100),
                       onPressed: () {
                         Navigator.of(context).pop();

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class SliverPersistenetDelegate extends SliverPersistentHeaderDelegate {
   SliverPersistenetDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
   });
 
   final double minHeight;

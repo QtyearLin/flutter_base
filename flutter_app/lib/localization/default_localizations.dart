@@ -16,14 +16,14 @@ class AppLocalizations {
     'zh': new AppStringZh(),
   };
 
-  AppStringBase get currentLocalized {
+  AppStringBase? get currentLocalized {
     if (_localizedValues.containsKey(locale.languageCode)) {
       return _localizedValues[locale.languageCode];
     }
     return _localizedValues["en"];
   }
 
-  static AppStringBase i18n(BuildContext context) {
+  static AppStringBase? i18n(BuildContext context) {
     return (Localizations.of(context, AppLocalizations) as AppLocalizations)
         .currentLocalized;
   }

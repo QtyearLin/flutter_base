@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_module/localization/default_localizations.dart';
-import 'package:flutter_module/provider/user_provider.dart';
-import 'package:flutter_module/style/app_theme.dart';
+import 'package:flutter_app/localization/default_localizations.dart';
+import 'package:flutter_app/provider/user_provider.dart';
+import 'package:flutter_app/style/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class AppHomeDrawer extends StatefulWidget {
-  const AppHomeDrawer({Key key, this.callBackIndex}) : super(key: key);
+  const AppHomeDrawer({Key? key, required this.callBackIndex})
+      : super(key: key);
 
   final Function(DrawerIndex) callBackIndex;
 
@@ -16,9 +17,9 @@ class AppHomeDrawer extends StatefulWidget {
 }
 
 class _AppHomeDrawerState extends State<AppHomeDrawer> {
-  List<DrawerList> drawerList;
+  late List<DrawerList> drawerList;
 
-  DrawerList lastedSelectedDrawList = null;
+  late DrawerList lastedSelectedDrawList;
 
   @override
   void initState() {
@@ -36,32 +37,32 @@ class _AppHomeDrawerState extends State<AppHomeDrawer> {
       DrawerList(
         isSelected: true,
         index: DrawerIndex.HOME,
-        labelName: AppLocalizations.i18n(context).draw_course,
+        labelName: AppLocalizations.i18n(context)!.draw_course,
         icon: Icon(Icons.home),
       ),
       DrawerList(
         index: DrawerIndex.Help,
-        labelName: AppLocalizations.i18n(context).draw_activity,
+        labelName: AppLocalizations.i18n(context)!.draw_activity,
         icon: Icon(Icons.help),
       ),
       DrawerList(
         index: DrawerIndex.FeedBack,
-        labelName: AppLocalizations.i18n(context).draw_favor,
+        labelName: AppLocalizations.i18n(context)!.draw_favor,
         icon: Icon(Icons.feedback),
       ),
       DrawerList(
         index: DrawerIndex.Help,
-        labelName: AppLocalizations.i18n(context).draw_help,
+        labelName: AppLocalizations.i18n(context)!.draw_help,
         icon: Icon(Icons.help),
       ),
       DrawerList(
         index: DrawerIndex.Share,
-        labelName: AppLocalizations.i18n(context).share,
+        labelName: AppLocalizations.i18n(context)!.share,
         icon: Icon(Icons.share),
       ),
       DrawerList(
         index: DrawerIndex.About,
-        labelName: AppLocalizations.i18n(context).about,
+        labelName: AppLocalizations.i18n(context)!.about,
         icon: Icon(Icons.info),
       ),
     ];
@@ -106,7 +107,7 @@ class _AppHomeDrawerState extends State<AppHomeDrawer> {
                     padding: const EdgeInsets.only(top: 10, left: 4),
                     child: Text(
                       Provider.of<UserProvider>(context, listen: false)
-                          .get()
+                          .get()!
                           .phone,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -145,7 +146,7 @@ class _AppHomeDrawerState extends State<AppHomeDrawer> {
             children: <Widget>[
               ListTile(
                 title: Text(
-                  AppLocalizations.i18n(context).Login_out,
+                  AppLocalizations.i18n(context)!.Login_out,
                   style: TextStyle(
                     fontFamily: AppConstant.fontName,
                     fontWeight: FontWeight.w600,
@@ -198,12 +199,12 @@ class _AppHomeDrawerState extends State<AppHomeDrawer> {
                         width: 24,
                         height: 24,
                         child: Image.asset(listData.imageName,
-                            color: listData.isSelected
+                            color: listData.isSelected!
                                 ? AppColors.primaryValue
                                 : AppColors.nearlyBlack),
                       )
-                    : Icon(listData.icon.icon,
-                        color: listData.isSelected
+                    : Icon(listData.icon!.icon,
+                        color: listData.isSelected!
                             ? AppColors.primaryValue
                             : AppColors.nearlyBlack),
                 const Padding(
@@ -214,7 +215,7 @@ class _AppHomeDrawerState extends State<AppHomeDrawer> {
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
-                    color: listData.isSelected
+                    color: listData.isSelected!
                         ? AppColors.primaryValue
                         : AppColors.nearlyBlack,
                   ),
@@ -230,7 +231,7 @@ class _AppHomeDrawerState extends State<AppHomeDrawer> {
   }
 
   Future<void> navigationtoScreen(
-      DrawerList drawerList, DrawerIndex index) async {
+      DrawerList drawerList, DrawerIndex? index) async {
     if (lastedSelectedDrawList != null) {
       if (drawerList != lastedSelectedDrawList) {
         setState(() {
@@ -247,12 +248,12 @@ class _AppHomeDrawerState extends State<AppHomeDrawer> {
         lastedSelectedDrawList = drawerList;
       });
     }
-    widget.callBackIndex(index);
+    widget.callBackIndex(index!);
   }
 
   _renderItemCover(DrawerList listData) {
     print("_renderItemCover:" + listData.isSelected.toString());
-    return listData.isSelected
+    return listData.isSelected!
         ? Padding(
             padding: EdgeInsets.only(top: 8, bottom: 8),
             child: Container(
@@ -273,7 +274,7 @@ class _AppHomeDrawerState extends State<AppHomeDrawer> {
   }
 }
 
-Future<bool> _quit(BuildContext context) {
+Future<bool?> _quit(BuildContext context) {
   return showDialog<bool>(
     context: context,
     builder: (context) {
@@ -321,9 +322,9 @@ class DrawerList {
   });
 
   var labelName;
-  Icon icon;
-  bool isSelected;
+  Icon? icon;
+  bool? isSelected;
   bool isAssetsImage;
   var imageName;
-  DrawerIndex index;
+  DrawerIndex? index;
 }

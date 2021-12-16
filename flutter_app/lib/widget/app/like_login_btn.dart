@@ -1,12 +1,12 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_module/style/app_theme.dart';
+import './../../style/app_theme.dart';
 
 class AppChipeBtn extends StatelessWidget {
   final String title;
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool full = true;
   final double height;
 
@@ -16,10 +16,10 @@ class AppChipeBtn extends StatelessWidget {
   final double paddingLR;
   final double paddingTB;
 
-  final Color colorBg;
-  final Color colorTitle;
+  final Color? colorBg;
+  final Color? colorTitle;
 
-  final ShapeBorder borderRadius;
+  final ShapeBorder? borderRadius;
 
   final double defaultBorderRadiusSize;
 
@@ -45,11 +45,11 @@ class AppChipeBtn extends StatelessWidget {
       padding: EdgeInsets.only(
           left: paddingLR, right: paddingLR, top: paddingTB, bottom: paddingTB),
       height: height,
-      child: RaisedButton(
+      child: MaterialButton(
         color: colorBg ?? Theme.of(context).primaryColor,
         child: Text(
           title,
-          style: colorTitle ?? Theme.of(context).primaryTextTheme.title,
+          style: TextStyle(color: colorTitle),
         ),
         // 设置按钮圆角
         shape: borderRadius ??
