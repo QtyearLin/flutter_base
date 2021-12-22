@@ -26,7 +26,7 @@ class AppChipeBtn extends StatelessWidget {
   AppChipeBtn(
     this.title, {
     this.onPressed,
-    this.height = 44,
+    this.height = 48,
     this.marginLR = 20,
     this.marginTB = 10,
     this.paddingLR = 0,

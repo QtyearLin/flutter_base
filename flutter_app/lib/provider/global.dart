@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../config/app_keys.dart';
 import 'user_provider.dart';
+import 'package:logger/logger.dart';
 
 /// 全局配置
 class Global {
@@ -40,10 +41,13 @@ class Global {
   static var xx = "1231";
 
   static bool isLoginAsTeacher = false; //老师
+  static var logger = Logger();
 
   /// init
   static Future init() async {
     // 运行初始
+    Logger.level = Level.debug;
+    logger.d("init");
     WidgetsFlutterBinding.ensureInitialized();
     // 读取设备信息
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();

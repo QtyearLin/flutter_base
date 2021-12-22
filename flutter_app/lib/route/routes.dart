@@ -20,6 +20,7 @@ final routes = {
 /**
  * 路由解析
  */
+// ignore: prefer_function_declarations_over_variables
 var onGenerateRoute = (RouteSettings settings) {
   // 统一处理
   var name = settings.name;
@@ -34,7 +35,7 @@ var onGenerateRoute = (RouteSettings settings) {
   final Function? pageContentBuilder = routes[name!];
   if (pageContentBuilder != null) {
     if (arguments != null) {
-      print("onGenerateRoute:name:" + name);
+      print("onGenerateRoute:name:%s" + name);
       print("onGenerateRoute:arguments" + arguments.toString());
       print("arguments-type:" + arguments.runtimeType.toString());
       final Route route = MaterialPageRoute(

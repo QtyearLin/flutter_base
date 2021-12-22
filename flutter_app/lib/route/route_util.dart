@@ -71,7 +71,7 @@ class RouteUtils {
       BuildContext context, Widget widget) {
     return Navigator.push(
         context,
-        new CupertinoPageRoute(
+        new MaterialPageRoute(
             builder: (context) => pageContainer(widget, context)));
   }
 

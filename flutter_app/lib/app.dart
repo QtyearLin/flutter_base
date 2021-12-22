@@ -1,9 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/provider/global.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'config/app_config.dart';
 import 'localization/app_localizations_delegate.dart';
 import 'provider/app_provider.dart';
 import 'route/routes.dart';
@@ -32,7 +34,17 @@ class _MyAppState extends State<MyApp> {
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
 
+    //chrom mouse
+    const Set<PointerDeviceKind> _kTouchLikeDeviceTypes = <PointerDeviceKind>{
+      PointerDeviceKind.touch,
+      PointerDeviceKind.mouse,
+      PointerDeviceKind.stylus,
+      PointerDeviceKind.invertedStylus,
+      PointerDeviceKind.unknown
+    };
     return MaterialApp(
+      scrollBehavior: const MaterialScrollBehavior()
+          .copyWith(scrollbars: true, dragDevices: _kTouchLikeDeviceTypes),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         // 本地化的代理类
@@ -59,9 +71,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  static const MethodChannel _methodChannel =
-      MethodChannel(AppConfig.methodChannel);
-
   @override
   // ignore: must_call_super
   void initState() {
@@ -70,15 +79,8 @@ class _MyAppState extends State<MyApp> {
 
   _init() {
     ///register page widget builders,the key is pageName
+    Global.init();
   }
 
-  void _initContext(BuildContext context) {
-    //platform
-    _methodChannel.invokeMethod(AppConfig.getPlatformVersion).then((value) {
-      print("getPlatformVersion:" + value.toString());
-      Provider.of<AppProvider>(context, listen: false).platForm = value;
-    }, onError: (e) {
-      print("getPlatformVersion:$e");
-    });
-  }
+  void _initContext(BuildContext context) {}
 }

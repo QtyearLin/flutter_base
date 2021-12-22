@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'app.dart';
 import 'provider/app_provider.dart';
 import 'provider/user_provider.dart';
-import 'provider/global.dart';
 import 'widget/base_error_page.dart';
 
 Future<void> main() async {

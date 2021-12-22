@@ -1,11 +1,7 @@
 import 'dart:async';
-import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/bean/user_bean.dart';
-import 'package:flutter_app/pages/tabs/index_activity.dart';
-import 'package:flutter_app/style/app_theme.dart';
 import 'package:flutter_app/bean/app_eventbus_event.dart';
 import 'package:flutter_app/bean/user_bean.dart';
 import 'package:flutter_app/config/app_channel_methods.dart';
@@ -17,6 +13,7 @@ import 'package:flutter_app/style/app_theme.dart';
 import 'package:flutter_app/utils/bus_utils.dart';
 import 'package:flutter_app/widget/base_will_pop_scope_route.dart';
 import 'package:provider/provider.dart';
+
 import 'home_drawer.dart';
 
 class HomeIndex extends StatefulWidget {

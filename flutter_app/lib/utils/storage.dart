@@ -11,9 +11,7 @@ class StorageUtil {
   StorageUtil._();
 
   static Future<void> init() async {
-    if (_prefs == null) {
-      _prefs = await SharedPreferences.getInstance();
-    }
+    _prefs = await SharedPreferences.getInstance();
   }
 
   Future<bool> setJSON(String key, dynamic jsonVal) {
@@ -45,10 +43,6 @@ class StorageUtil {
   }
 
   bool getBoolDefault(String key, bool value) {
-    if (_prefs == null) {
-      print("getBoolDefault: _prefs is null");
-      return value;
-    }
     bool? val = _prefs.getBool(key);
     print("key:" + key + "value:" + val.toString());
     return val == null ? value : val;
@@ -66,14 +60,12 @@ class StorageUtil {
 
   /// get object.
   Map? getObject(String key) {
-    if (_prefs == null) return null;
     String? _data = _prefs.getString(key);
     return (_data == null || _data.isEmpty) ? null : json.decode(_data);
   }
 
   /// put object list.
   Future<bool>? putObjectList(String key, List<Object> list) {
-    if (_prefs == null) return null;
     List<String> _dataList = list.map((value) {
       return json.encode(value);
     }).toList();
@@ -91,7 +83,6 @@ class StorageUtil {
 
   /// get object list.
   List<Map>? getObjectList(String key) {
-    if (_prefs == null) return null;
     List<String>? dataLis = _prefs.getStringList(key);
     return dataLis?.map((value) {
       Map _dataMap = json.decode(value);
@@ -99,14 +90,14 @@ class StorageUtil {
     })?.toList();
   }
 
-  // static Future<SharedPreferences> getInstance() {
-  //   return SharedPreferences.getInstance();
-  // }
-  //
-  // static Future<bool> setString(String key, dynamic val) async {
-  //   return await getInstance().then((value) {
-  //     return value.setString(key, val);
-  //   });
-  // }
+// static Future<SharedPreferences> getInstance() {
+//   return SharedPreferences.getInstance();
+// }
+//
+// static Future<bool> setString(String key, dynamic val) async {
+//   return await getInstance().then((value) {
+//     return value.setString(key, val);
+//   });
+// }
 
 }
