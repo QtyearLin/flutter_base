@@ -8,6 +8,7 @@ import 'package:flutter_app/provider/global.dart';
 import 'package:flutter_app/provider/user_provider.dart';
 import 'package:flutter_app/style/app_theme.dart';
 import 'package:flutter_app/utils/storage.dart';
+import 'package:flutter_app/utils/validator.dart';
 import 'package:flutter_app/widget/app/like_login_btn.dart';
 import 'package:flutter_app/widget/app/logo.dart';
 import 'package:flutter_app/widget/base_toast.dart';
@@ -30,29 +31,23 @@ class LoginPage extends StatefulWidget {
   }
 }
 
-class _LoginPageState extends State<LoginPage> {
-
-
-
-
-  final String? _password = ''; //密码
-  final String? _username = ''; //用户名
-
-
+class _LoginPageState extends State<LoginPage> with LoginMinx {
+  String? _password = ''; //密码
+  String? _username = ''; //用户名
 
   final bool _showBottom = true; //是否显示输入框尾部的清除按钮
+
+  final GlobalKey<LoginSliceInputState> _loginSlice =
+      GlobalKey<LoginSliceInputState>();
 
   @override
   void initState() {
     //get auto accout sync
     _username = StorageUtil().getString(AppDataKeys.user_name);
     _password = StorageUtil().getString(AppDataKeys.user_passwd);
+
     if (null != _username && null != _password) {
-      setState(() {
-        _userNameController.text = _username!;
-        _userPasswdController.text = _password!;
-        // _login(auto: true);
-      });
+      _login(auto: true);
     }
   }
 
@@ -63,32 +58,24 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     // logo 图片区域
     Widget logoImageArea = LogoWidget();
 
-
-    Widget loginButtonArea = AppChipeBtn("登录",  colorTitle:Colors.white,onPressed: () {
-      //点击登录按钮，解除焦点，回收键盘
-      _focusNodePassWord.unfocus();
-      _focusNodeUserName.unfocus();
-
-      if (_formKey.currentState!.validate()) {
-        //只有输入通过验证，才会执行这里
-        _formKey.currentState!.save();
-        //todo 登录操作
-        print("$_username + $_password");
-        _login();
-      }
+    LoginSliceInput inputSlice = LoginSliceInput(
+        key: _loginSlice,
+        username: _username,
+        password: _password,
+        loginMinx: this);
+    Widget loginButtonArea =
+        AppChipeBtn("登录", colorTitle: Colors.white, onPressed: () {
+      _loginSlice.currentState?.valiate();
     });
-    const  double imageSize = 56;
+    const double imageSize = 56;
     //第三方登录区域
     Widget thirdLoginArea = Container(
       margin: const EdgeInsets.only(left: 20, right: 20),
@@ -171,7 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     //点击快速注册、执行事件
                     onPressed: () {
-                      var name = _userNameController.text;
+                      var name =
+                          _loginSlice.currentState?.getCurrentInputName();
                       if (validateUserName(name) == null) {
                         Navigator.push(
                             context,
@@ -192,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      resizeToAvoidBottomInset:false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         shadowColor: Colors.transparent,
@@ -207,8 +195,7 @@ class _LoginPageState extends State<LoginPage> {
           onTap: () {
             // 点击空白区域，回收键盘
             print("点击了空白区域");
-            _focusNodePassWord.unfocus();
-            _focusNodeUserName.unfocus();
+            _loginSlice.currentState?.unfocus();
           },
           child: Stack(
             children: <Widget>[
@@ -221,10 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 70,
                   ),
-                  const LoginSliceInput(
-                      username: _username,
-                    password: _password,
-                  ),
+                  inputSlice,
                   Container(
                     alignment: Alignment.centerRight,
                     // child:  Row(
@@ -265,12 +249,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _login({bool auto = false}) async {
-    if (!auto) {
-      if (!_formKey.currentState!.validate()) {
-        return;
-      }
-      _formKey.currentState!.save();
-    }
     EasyLoading.show(status: "正在加载中...");
     var userName = _username;
     var userPasswd = _generateMd5(_password);
@@ -302,5 +280,22 @@ class _LoginPageState extends State<LoginPage> {
     var content = const Utf8Encoder().convert(data);
     var digest = md5.convert(content);
     return hex.encode(digest.bytes);
+  }
+
+  @override
+  void onGetUserName(String name) {
+    _username = name;
+  }
+
+  @override
+  void onGetUserPassword(String password) {
+    _password = password;
+  }
+
+  @override
+  void onValiate(bool success) {
+    if (success) {
+      _login(auto: false);
+    }
   }
 }

@@ -3,15 +3,20 @@ import 'package:flutter/material.dart';
 class LoginSliceInput extends StatefulWidget {
   final String? username;
   final String? password;
+  final LoginMinx loginMinx;
 
-  const LoginSliceInput({Key? key, required this.username, required this.password})
+  const LoginSliceInput(
+      {Key? key,
+      required this.username,
+      required this.password,
+      required this.loginMinx})
       : super(key: key);
 
   @override
-  _LoginSliceInputState createState() => _LoginSliceInputState();
+  LoginSliceInputState createState() => LoginSliceInputState();
 }
 
-class _LoginSliceInputState extends State<LoginSliceInput> {
+class LoginSliceInputState extends State<LoginSliceInput> {
   //焦点
   final FocusNode _focusNodePassWord = FocusNode();
   final FocusNode _focusNodeUserName = FocusNode();
@@ -24,7 +29,13 @@ class _LoginSliceInputState extends State<LoginSliceInput> {
   var _isShowPwd = false; //是否显示密码
 
   //表单状态
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  //local key(value,object,unique)  glocal key
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void unfocus() {
+    _focusNodePassWord.unfocus();
+    _focusNodeUserName.unfocus();
+  }
 
   @override
   void initState() {
@@ -90,7 +101,7 @@ class _LoginSliceInputState extends State<LoginSliceInput> {
               validator: validateUserName,
               //保存数据
               onSaved: (var value) {
-                _username = value!;
+                this.widget.loginMinx.onGetUserName(value as String);
               },
             ),
             const SizedBox(
@@ -119,7 +130,7 @@ class _LoginSliceInputState extends State<LoginSliceInput> {
               validator: validatePassWord,
               //保存数据
               onSaved: (var value) {
-                _password = value!;
+                this.widget.loginMinx.onGetUserPassword(value as String);
               },
             )
           ],
@@ -169,4 +180,25 @@ class _LoginSliceInputState extends State<LoginSliceInput> {
       _focusNodeUserName.unfocus();
     }
   }
+
+  void valiate() {
+    if (_formKey.currentState!.validate()) {
+      //只有输入通过验证，才会执行这里
+      _formKey.currentState!.save();
+      //todo 登录操作
+      widget.loginMinx.onValiate(true);
+    } else {
+      widget.loginMinx.onValiate(false);
+    }
+  }
+
+  String getCurrentInputName() {
+    return _userNameController.text;
+  }
+}
+
+mixin LoginMinx {
+  void onGetUserName(String name);
+  void onGetUserPassword(String password);
+  void onValiate(bool success);
 }

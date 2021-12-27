@@ -2,27 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_app/apis/user_api.dart';
 import 'package:flutter_app/bean/user_bean.dart';
-import 'package:flutter_app/pages/login/register.dart';
-import 'package:flutter_app/pages/home_index.dart';
-import 'package:flutter_app/config/app_url.dart';
 import 'package:flutter_app/config/app_keys.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_app/pages/home_index.dart';
 import 'package:flutter_app/provider/global.dart';
 import 'package:flutter_app/provider/user_provider.dart';
 import 'package:flutter_app/style/app_theme.dart';
 import 'package:flutter_app/utils/storage.dart';
 import 'package:flutter_app/widget/base_toast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_verification_box/verification_box.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:convert/convert.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
-
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //验证码登录
 class LoginWithVerfyCodePage extends StatefulWidget {
