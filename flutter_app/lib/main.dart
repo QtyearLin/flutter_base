@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import 'app.dart';
@@ -11,6 +12,10 @@ import 'widget/base_error_page.dart';
 
 Future<void> main() async {
   //全局异常捕获
+  debugProfileBuildsEnabled = true;
+  debugProfileLayoutsEnabled = true;
+  debugProfilePaintsEnabled = true;
+
   runZoned(() async {
     ErrorWidget.builder = (FlutterErrorDetails details) {
       Zone.current.handleUncaughtError(details.exception, details.stack!);

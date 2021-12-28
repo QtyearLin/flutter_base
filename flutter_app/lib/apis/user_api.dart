@@ -9,12 +9,12 @@ import '../config/app_url.dart';
 class UserApi {
   static const int PAGE_SIZE = 20;
 
-  static login(bool isTeacher, Map<String, dynamic> params, Function onSuccess,
-      Function onError) {
+  static login(
+      Map<String, dynamic> params, Function onSuccess, Function onError) {
     HttpUtil().post(AppUrl.Login, data: params, success: (response) {
       // 请求成功返回的数据
       UserBean? userBean = UserBean.fromMap(response);
-      userBean?.role = isTeacher ? 1 : 0;
+      userBean?.role = 0;
       onSuccess(userBean);
     }, error: (code, errorMsg) {
       // 请求失败返回的错误信息
@@ -22,12 +22,12 @@ class UserApi {
     });
   }
 
-  static loginWithVCode(bool isTeacher, Map<String, dynamic> params,
-      Function onSuccess, Function onError) {
+  static loginWithVCode(
+      Map<String, dynamic> params, Function onSuccess, Function onError) {
     HttpUtil().post(AppUrl.Login, data: params, success: (response) {
       // 请求成功返回的数据
       UserBean? userBean = UserBean.fromMap(response);
-      userBean?.role = isTeacher ? 1 : 0;
+      userBean?.role = 0;
       onSuccess(userBean);
     }, error: (code, errorMsg) {
       // 请求失败返回的错误信息

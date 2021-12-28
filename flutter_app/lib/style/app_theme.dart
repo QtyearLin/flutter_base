@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_const
+
 import 'package:flutter/material.dart';
 
 ///颜色
@@ -55,7 +57,6 @@ class AppColors {
 }
 
 class AppConstant {
-
   static const lagerTextSize = 30.0;
   static const bigTextSize = 23.0;
   static const normalTextSize = 17.0;
@@ -139,15 +140,10 @@ class AppConstant {
     letterSpacing: 0.2,
     color: AppColors.darkText, // was lightText
   );
-
-
-
 }
 
 class AppICons {
-
   static const DEFAULT_APP_LOGO = 'static/images/ic_logo_app.png';
   static const DEFAULT_IMAGE = 'static/images/user_image.png';
   static const DEFAULT_USER_DEFAULT_HEAD = 'static/images/user_image.png';
-
 }

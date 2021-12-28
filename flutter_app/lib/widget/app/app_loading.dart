@@ -12,13 +12,13 @@ class AppLoadingWidget extends StatefulWidget {
 class _AppLoadingWidgetState extends State<AppLoadingWidget> {
   @override
   Widget build(BuildContext context) {
-    return this.widget.sliver
-        ? SliverToBoxAdapter(
+    return widget.sliver
+        ? const SliverToBoxAdapter(
             child: Center(
               child: CircularProgressIndicator(),
             ),
           )
-        : Center(
+        : const Center(
             child: CircularProgressIndicator(),
           );
   }

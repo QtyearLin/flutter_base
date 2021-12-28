@@ -1,3 +1,6 @@
 
 // Generated file. Do not edit.
 include ':android'
+include ':flutter_plugin_rtc'
+
+project(':flutter_plugin_rtc').projectDir =file('../flutter_plugin_rtc')

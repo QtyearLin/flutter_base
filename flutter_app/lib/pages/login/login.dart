@@ -64,120 +64,8 @@ class _LoginPageState extends State<LoginPage> with LoginMinx {
   @override
   Widget build(BuildContext context) {
     // logo 图片区域
-    Widget logoImageArea = LogoWidget();
-
-    LoginSliceInput inputSlice = LoginSliceInput(
-        key: _loginSlice,
-        username: _username,
-        password: _password,
-        loginMinx: this);
-    Widget loginButtonArea =
-        AppChipeBtn("登录", colorTitle: Colors.white, onPressed: () {
-      _loginSlice.currentState?.valiate();
-    });
     const double imageSize = 56;
     //第三方登录区域
-    Widget thirdLoginArea = Container(
-      margin: const EdgeInsets.only(left: 20, right: 20),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                width: 80,
-                height: 1.0,
-                color: Colors.grey,
-              ),
-              const Text('第三方登录'),
-              Container(
-                width: 85,
-                height: 1.0,
-                color: Colors.grey,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 18,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              IconButton(
-                color: Colors.green[200],
-                // 第三方库icon图标
-                icon: const Icon(FontAwesomeIcons.weixin),
-                iconSize: imageSize,
-                onPressed: () {},
-              ),
-              IconButton(
-                color: Colors.green[200],
-                icon: Icon(FontAwesomeIcons.facebook),
-                iconSize: imageSize,
-                onPressed: () {},
-              ),
-              IconButton(
-                color: Colors.green[200],
-                icon: Icon(FontAwesomeIcons.qq),
-                iconSize: imageSize,
-                onPressed: () {},
-              )
-            ],
-          )
-        ],
-      ),
-    );
-
-    //忘记密码  立即注册
-    Widget bottomArea = Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Visibility(
-        visible: _showBottom,
-        child: Column(
-          children: <Widget>[
-            thirdLoginArea,
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              margin: const EdgeInsets.only(right: 20, left: 30),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  FlatButton(
-                    child: const Text(
-                      "快速登录",
-                      style: TextStyle(
-                        color: AppColors.selected,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                    //点击快速注册、执行事件
-                    onPressed: () {
-                      var name =
-                          _loginSlice.currentState?.getCurrentInputName();
-                      if (validateUserName(name) == null) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginWithVerfyCodePage(
-                                    phone: name, type: false)));
-                      } else {
-                        BaseToast.showToast("请输入正确的手机号");
-                      }
-                    },
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -204,11 +92,15 @@ class _LoginPageState extends State<LoginPage> with LoginMinx {
                   // SizedBox(
                   //   height: ScreenUtil().setHeight(100),
                   // ),
-                  logoImageArea,
+                  LogoWidget(),
                   const SizedBox(
                     height: 70,
                   ),
-                  inputSlice,
+                  LoginSliceInput(
+                      key: _loginSlice,
+                      username: _username,
+                      password: _password,
+                      loginMinx: this),
                   Container(
                     alignment: Alignment.centerRight,
                     // child:  Row(
@@ -239,10 +131,110 @@ class _LoginPageState extends State<LoginPage> with LoginMinx {
                   const SizedBox(
                     height: 30,
                   ),
-                  loginButtonArea,
+                  AppChipeBtn("登录", colorTitle: Colors.white, onPressed: () {
+                    _loginSlice.currentState?.valiate();
+                  }),
                 ],
               ),
-              bottomArea,
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Visibility(
+                  visible: _showBottom,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                  width: 80,
+                                  height: 1.0,
+                                  color: Colors.grey,
+                                ),
+                                const Text('第三方登录'),
+                                Container(
+                                  width: 85,
+                                  height: 1.0,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                IconButton(
+                                  color: Colors.green[200],
+                                  // 第三方库icon图标
+                                  icon: const Icon(FontAwesomeIcons.weixin),
+                                  iconSize: imageSize,
+                                  onPressed: () {},
+                                ),
+                                IconButton(
+                                  color: Colors.green[200],
+                                  icon: Icon(FontAwesomeIcons.facebook),
+                                  iconSize: imageSize,
+                                  onPressed: () {},
+                                ),
+                                IconButton(
+                                  color: Colors.green[200],
+                                  icon: Icon(FontAwesomeIcons.qq),
+                                  iconSize: imageSize,
+                                  onPressed: () {},
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 20, left: 30),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            FlatButton(
+                              child: const Text(
+                                "快速登录",
+                                style: TextStyle(
+                                  color: AppColors.selected,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                              //点击快速注册、执行事件
+                              onPressed: () {
+                                var name = _loginSlice.currentState
+                                    ?.getCurrentInputName();
+                                if (validateUserName(name) == null) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LoginWithVerfyCodePage(
+                                                  phone: name, type: false)));
+                                } else {
+                                  BaseToast.showToast("请输入正确的手机号");
+                                }
+                              },
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ],
           )),
     );
@@ -252,7 +244,7 @@ class _LoginPageState extends State<LoginPage> with LoginMinx {
     EasyLoading.show(status: "正在加载中...");
     var userName = _username;
     var userPasswd = _generateMd5(_password);
-    UserApi.login(Global.isLoginAsTeacher, {
+    UserApi.login({
       'username': userName,
       'password': userPasswd,
       'client_agent': AppDataKeys.clientAgent,

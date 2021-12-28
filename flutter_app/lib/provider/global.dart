@@ -40,7 +40,6 @@ class Global {
 
   static var xx = "1231";
 
-  static bool isLoginAsTeacher = false; //老师
   static var logger = Logger();
 
   /// init

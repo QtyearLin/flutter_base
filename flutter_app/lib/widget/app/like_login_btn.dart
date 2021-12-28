@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import './../../style/app_theme.dart';
 
 class AppChipeBtn extends StatelessWidget {
   final String title;
@@ -23,8 +22,9 @@ class AppChipeBtn extends StatelessWidget {
 
   final double defaultBorderRadiusSize;
 
-  AppChipeBtn(
+  const AppChipeBtn(
     this.title, {
+    Key? key,
     this.onPressed,
     this.height = 48,
     this.marginLR = 20,

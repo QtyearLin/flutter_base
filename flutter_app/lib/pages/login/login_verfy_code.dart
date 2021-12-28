@@ -1,19 +1,21 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/apis/user_api.dart';
+import 'package:flutter_app/apis/app_apis.dart';
 import 'package:flutter_app/bean/user_bean.dart';
 import 'package:flutter_app/config/app_keys.dart';
-import 'package:flutter_app/pages/home_index.dart';
+import 'package:flutter_app/pages/login/countdown.dart';
 import 'package:flutter_app/provider/global.dart';
 import 'package:flutter_app/provider/user_provider.dart';
-import 'package:flutter_app/style/app_theme.dart';
 import 'package:flutter_app/utils/storage.dart';
+import 'package:logger/logger.dart';
 import 'package:flutter_app/widget/base_toast.dart';
+import '../../style/app_theme.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_verification_box/verification_box.dart';
 import 'package:provider/provider.dart';
+
+import '../home_index.dart';
 
 //验证码登录
 class LoginWithVerfyCodePage extends StatefulWidget {
@@ -24,33 +26,21 @@ class LoginWithVerfyCodePage extends StatefulWidget {
   @override
   _LoginWithVerfyCodePageState createState() => _LoginWithVerfyCodePageState();
 
-  LoginWithVerfyCodePage({Key? key, this.phone, this.type = true})
+  const LoginWithVerfyCodePage({Key? key, this.phone, this.type = true})
       : super(key: key);
 }
 
-class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
-  //焦点
-  FocusNode _focusNodeUserName = new FocusNode();
-  FocusNode _focusNodePassWord = new FocusNode();
+class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage>
+    with CountDownCallbackMixin {
+  final String _password = ''; //密码
 
-  //用户名输入框控制器，此控制器可以监听用户名输入框操作
+  static const _codeCountdownStr = '获取验证码';
 
-  //表单状态
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  var _password = ''; //密码
-  var _isShowPwd = false; //是否显示密码
-  var _isShowClear = false; //是否显示输入框尾部的清除按钮
-  int _countdownNum = 59;
-
-  Timer? _countdownTimer;
-
-  var _codeCountdownStr = '获取验证码';
+  var logger = Logger();
 
   @override
   void initState() {
     super.initState();
-    // reGetCountdown();
   }
 
   @override
@@ -61,94 +51,67 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
   @override
   void dispose() {
     super.dispose();
-    _cancelTimer();
-  }
-
-  void reGetCountdown() {
-    setState(() {
-      if (_countdownTimer != null) {
-        return;
-      }
-      getVerifyCode();
-      // Timer的第一秒倒计时是有一点延迟的，为了立刻显示效果可以添加下一行。
-      _codeCountdownStr = '${_countdownNum--} 后重新获取';
-      _countdownTimer = new Timer.periodic(new Duration(seconds: 1), (timer) {
-        setState(() {
-          if (_countdownNum > 0) {
-            _codeCountdownStr = '${_countdownNum--}重新获取';
-          } else {
-            _codeCountdownStr = '获取验证码';
-            _countdownNum = 59;
-            _countdownTimer!.cancel();
-            _countdownTimer = null;
-          }
-        });
-      });
-    });
-  }
-
-  /// 取消倒计时的计时器。
-  void _cancelTimer() {
-    if (null != _countdownTimer)
-      // 计时器（`Timer`）组件的取消（`cancel`）方法，取消计时器。
-      _countdownTimer?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.close,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: new Container(
-            padding: EdgeInsets.all(16),
+          physics: const BouncingScrollPhysics(),
+          child: Container(
+            padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Container(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                new SizedBox(
+                const SizedBox(
                   height: 150,
                 ),
-                new Container(
-                  margin: EdgeInsets.only(left: 8),
+                Container(
+                  margin: const EdgeInsets.only(left: 8),
                   height: 80,
                   alignment: Alignment.centerLeft,
-                  child: Text("请输入验证码登录",
+                  child: const Text("请输入验证码登录",
                       style: TextStyle(
                         color: Colors.black54,
-                        fontSize: 20.0,
+                        fontSize: 24.0,
                       )),
                 ),
-                new SizedBox(
-                  height: 25,
+                const SizedBox(
+                  height: 10,
                 ),
-                new Container(
-                  margin: EdgeInsets.only(left: 10),
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
                   height: 50,
                   alignment: Alignment.centerLeft,
                   child: Text("验证码已发送至 : " + widget.phone,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black38,
-                        fontSize: 10.0,
+                        fontSize: 14.0,
                       )),
                 ),
-                Container(
-                  height: 100,
+                SizedBox(
+                  height: 70,
                   child: VerificationBox(
                     count: 6,
                     autoFocus: true,
                     showCursor: true,
                     unfocus: false,
                     cursorWidth: 2,
-                    cursorColor: Colors.red,
+                    cursorColor: AppColors.primaryValue,
                     cursorIndent: 10,
                     cursorEndIndent: 10,
                     focusBorderColor: AppColors.primaryValue,
@@ -158,23 +121,14 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
                     },
                   ),
                 ),
-                new SizedBox(
+                const SizedBox(
                   height: 25,
                 ),
-                new Container(
-                  margin: EdgeInsets.only(left: 8),
+                Container(
+                  margin: const EdgeInsets.only(left: 8),
                   alignment: Alignment.centerLeft,
-                  child: InkWell(
-                      onTap: () {
-                        reGetCountdown();
-                      },
-                      child: Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Text(_codeCountdownStr,
-                              style: TextStyle(
-                                color: Colors.black38,
-                                fontSize: 10.0,
-                              )))),
+                  child: CountDownWidget(
+                      title: _codeCountdownStr, callbackMixin: this),
                 ),
               ],
             ),
@@ -183,20 +137,6 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
   }
 
   //获取验证码
-  void getVerifyCode() {
-    EasyLoading.show(status: "请稍后...");
-    UserApi.getVerifyCode({
-      'phone': widget.phone,
-    }, (data) {
-      EasyLoading.dismiss(animation: true);
-      BaseToast.showToast("验证码获取成功，请查收短信新");
-      FocusScope.of(context).unfocus();
-      //save data
-    }, (code, message) {
-      EasyLoading.dismiss(animation: true);
-      BaseToast.showErroToast("验证码获失败,$message");
-    });
-  }
 
   bool isRequest = false;
 
@@ -204,8 +144,8 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
   void _loginWithVCode(value) {
     if (isRequest) return;
     isRequest = true;
-    EasyLoading.show(status: "正在登录...");
-    UserApi.loginWithVCode(Global.isLoginAsTeacher, {
+    EasyLoading.show(status: "正在登录...", dismissOnTap: true);
+    UserApi.loginWithVCode({
       'phone': widget.phone,
       'verify_code': value,
       'client_agent': AppDataKeys.clientAgent,
@@ -230,7 +170,7 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
       EasyLoading.dismiss(animation: true);
       BaseToast.showToast("登录成功");
       //save data
-      UserBean data = new UserBean();
+      UserBean data = UserBean();
       data.id = 1;
       data.phone = "12312312";
       data.name = "XXX";
@@ -241,6 +181,22 @@ class _LoginWithVerfyCodePageState extends State<LoginWithVerfyCodePage> {
           context,
           MaterialPageRoute(builder: (context) => HomeIndex()),
           (route) => route == null);
+    });
+  }
+
+  @override
+  void  getVerifyCode() {
+    EasyLoading.show(status: "请稍后...", dismissOnTap: true);
+    UserApi.getVerifyCode({
+      'phone': widget.phone,
+    }, (data) {
+      EasyLoading.dismiss(animation: true);
+      BaseToast.showToast("验证码获取成功，请查收短信新");
+      FocusScope.of(context).unfocus();
+      //save data
+    }, (code, message) {
+      EasyLoading.dismiss(animation: true);
+      BaseToast.showErroToast("验证码获失败,$message");
     });
   }
 }

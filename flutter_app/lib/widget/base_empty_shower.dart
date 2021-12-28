@@ -5,7 +5,7 @@ class BaseEmptyPage extends StatelessWidget {
   final VoidCallback? onPress;
   final bool sliver;
 
-  BaseEmptyPage({
+  const BaseEmptyPage({
     Key? key,
     this.message = "数据为空,点击刷新试试",
     this.onPress,

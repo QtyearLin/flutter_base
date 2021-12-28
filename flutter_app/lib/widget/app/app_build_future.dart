@@ -38,6 +38,7 @@ class _AppBuildFutureState extends State<AppBuildFuture> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       builder: _buildFuture,
+      // initialData: ,
     );
   }
 
